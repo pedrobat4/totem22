@@ -63,18 +63,21 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
 
         {flash && <motion.div className="gold-flash" initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.1, times: [0, 0.2, 1] }} />}
 
-        {/* botão central GIRAR (fora da rotação) */}
+        {/* botão central GIRAR — overlay flex centraliza no miolo de verdade
+            (a pulsação usa transform:scale, que não desloca mais o botão) */}
         {!spinning && (
-          <motion.button
-            onClick={(e) => {
-              e.stopPropagation()
-              start()
-            }}
-            whileTap={{ scale: 0.92 }}
-            className="animate-touchpulse absolute left-1/2 top-1/2 z-30 flex h-[19cqw] w-[19cqw] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-lime text-[3.6cqw] font-black tracking-wide text-graphite-950 shadow-[0_1.4cqw_4cqw_rgba(148,188,34,.55)]"
-          >
-            GIRAR
-          </motion.button>
+          <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation()
+                start()
+              }}
+              whileTap={{ scale: 0.92 }}
+              className="animate-touchpulse pointer-events-auto flex h-[19cqw] w-[19cqw] items-center justify-center rounded-full bg-lime text-[3.6cqw] font-black tracking-wide text-graphite-950 shadow-[0_1.4cqw_4cqw_rgba(148,188,34,.55)]"
+            >
+              GIRAR
+            </motion.button>
+          </div>
         )}
       </div>
     </div>
