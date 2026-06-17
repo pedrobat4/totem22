@@ -39,15 +39,6 @@ export function Categorias({ onDone }: { onDone: (selected: string[]) => void })
                 {c.emoji}
               </span>
               <span className="text-[3.6cqw] font-bold leading-tight">{c.label}</span>
-              {on && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="ml-auto flex h-[5cqw] w-[5cqw] flex-none items-center justify-center rounded-full bg-graphite-950 text-[2.8cqw] text-lime"
-                >
-                  ✓
-                </motion.span>
-              )}
             </motion.button>
           )
         })}
