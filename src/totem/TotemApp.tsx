@@ -7,6 +7,7 @@ import { Categorias } from './Categorias'
 import { Roleta } from './Roleta'
 import { Resultado } from './Resultado'
 import { makeToken } from '../lib/token'
+import { CATEGORIES } from '../lib/data'
 import type { Store } from '../lib/types'
 
 type Step = 'attract' | 'cadastro' | 'categorias' | 'roleta' | 'resultado'
@@ -16,7 +17,7 @@ const INACTIVITY_MS = 60_000
 export function TotemApp() {
   const [step, setStep] = useState<Step>('attract')
   const [name, setName] = useState('')
-  const [, setPhone] = useState('')
+  const [phone, setPhone] = useState('')
   const [categories, setCategories] = useState<string[]>([])
   const [store, setStore] = useState<Store | null>(null)
   const [token, setToken] = useState('')
@@ -59,7 +60,8 @@ export function TotemApp() {
   }
   const onRoleta = (won: Store) => {
     setStore(won)
-    setToken(makeToken(name, won))
+    const catLabels = categories.map((id) => CATEGORIES.find((c) => c.id === id)?.label ?? id)
+    setToken(makeToken({ name, phone, categories: catLabels, store: won }))
     setStep('resultado')
   }
 

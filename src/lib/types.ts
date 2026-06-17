@@ -28,12 +28,15 @@ export type Lead = {
   createdAt: number
 }
 
-/** Conteúdo decodificado do QR Code. */
+/** Conteúdo decodificado do QR Code — tudo que o /validador precisa mostrar. */
 export type TokenPayload = {
   v: 1
   id: string
   name: string
+  phone: string
+  categories: string[] // rótulos do que a pessoa mais gosta
   storeName: string
   prize: string
+  location: string // localização do totem
   ts: number
 }

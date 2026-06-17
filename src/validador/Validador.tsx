@@ -10,6 +10,23 @@ type Result =
 
 const READER_ID = 'qr-reader'
 
+function fmtWhen(ts: number): string {
+  try {
+    return new Date(ts).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  } catch {
+    return '—'
+  }
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-b border-white/10 py-2.5 last:border-0">
+      <span className="shrink-0 text-white/55">{label}</span>
+      <span className="text-right font-semibold">{value || '—'}</span>
+    </div>
+  )
+}
+
 export function Validador() {
   const scannerRef = useRef<Html5Qrcode | null>(null)
   const runningRef = useRef(false)
@@ -33,12 +50,7 @@ export function Validador() {
     if (!scannerRef.current) scannerRef.current = new Html5Qrcode(READER_ID)
     try {
       runningRef.current = true
-      await scannerRef.current.start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 300, height: 300 } },
-        onDecoded,
-        () => {},
-      )
+      await scannerRef.current.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 300, height: 300 } }, onDecoded, () => {})
     } catch {
       runningRef.current = false
       setError('Não foi possível acessar a câmera. Permita o acesso à câmera e recarregue a página.')
@@ -51,7 +63,7 @@ export function Validador() {
 
     // GANCHO API REAL: em vez de decodificar local + checar localStorage,
     // troque por  await fetch('/api/validar', { method:'POST', body: token })
-    // e use o status retornado pelo backend.
+    // e use o status/dados retornados pelo backend.
     const payload = decodeToken(text)
     if (!payload) return setResult({ status: 'invalid' })
     if (isUsed(payload.id)) return setResult({ status: 'used', payload })
@@ -68,10 +80,12 @@ export function Validador() {
   }, [])
 
   const ok = result?.status === 'valid'
-  const bg = !result ? '#1b1c1c' : ok ? '#1d2b0a' : result.status === 'used' ? '#2b0d0d' : '#2b2410'
+  const used = result?.status === 'used'
+  const pageBg = !result ? '#1b1c1c' : ok ? '#1d2b0a' : used ? '#2b0d0d' : '#2b2410'
+  const headBg = ok ? '#94BC22' : used ? '#C0142B' : '#9a7b13'
 
   return (
-    <div className="min-h-screen w-full text-white" style={{ background: bg, transition: 'background .3s', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="min-h-screen w-full text-white" style={{ background: pageBg, transition: 'background .3s', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <div className="mx-auto flex min-h-screen max-w-[560px] flex-col px-6 py-8">
         <header className="text-center">
           <h1 className="text-3xl font-extrabold">
@@ -80,7 +94,7 @@ export function Validador() {
           <p className="mt-1 text-white/60">Aponte a câmera para o QR Code do prêmio</p>
         </header>
 
-        {/* área da câmera */}
+        {/* câmera */}
         <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-black/40">
           <div id={READER_ID} className="aspect-square w-full" />
         </div>
@@ -89,19 +103,21 @@ export function Validador() {
 
         {/* resultado */}
         {result && (
-          <div className="mt-6 rounded-3xl p-7 text-center" style={{ background: ok ? '#94BC22' : result.status === 'used' ? '#C0142B' : '#9a7b13', color: ok ? '#1b1c1c' : '#fff' }}>
-            <div className="text-6xl">{ok ? '✅' : result.status === 'used' ? '⛔' : '❓'}</div>
-            <div className="mt-2 text-4xl font-black">
-              {ok ? 'VÁLIDO' : result.status === 'used' ? 'JÁ UTILIZADO' : 'QR INVÁLIDO'}
+          <div className="mt-6 overflow-hidden rounded-3xl border border-white/10">
+            <div className="p-6 text-center" style={{ background: headBg, color: ok ? '#1b1c1c' : '#fff' }}>
+              <div className="text-6xl">{ok ? '✅' : used ? '⛔' : '❓'}</div>
+              <div className="mt-1 text-4xl font-black">{ok ? 'VÁLIDO' : used ? 'JÁ UTILIZADO' : 'QR INVÁLIDO'}</div>
+              {used && <div className="mt-1 text-sm opacity-90">Este prêmio já foi resgatado</div>}
             </div>
 
             {result.status !== 'invalid' && (
-              <div className="mt-5 space-y-1">
-                <div className="text-2xl font-bold">{result.payload.storeName}</div>
-                <div className="text-lg opacity-90">{result.payload.prize}</div>
-                <div className="mt-3 text-lg">
-                  Lead: <span className="font-semibold">{result.payload.name}</span>
-                </div>
+              <div className="bg-black/35 px-6 py-4 text-[15px]">
+                <Row label="Prêmio" value={`${result.payload.storeName} — ${result.payload.prize}`} />
+                <Row label="Nome" value={result.payload.name} />
+                <Row label="Telefone" value={result.payload.phone} />
+                <Row label="Mais gosta de" value={(result.payload.categories || []).join(' · ')} />
+                <Row label="Totem" value={result.payload.location} />
+                <Row label="Horário" value={fmtWhen(result.payload.ts)} />
               </div>
             )}
           </div>

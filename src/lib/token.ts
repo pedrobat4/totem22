@@ -1,4 +1,5 @@
 import type { Store, TokenPayload } from './types'
+import { TOTEM } from '../config'
 
 /* ─── base64url UTF-8 (suporta acentos) ─────────────────────────────── */
 function b64urlEncode(s: string): string {
@@ -19,14 +20,17 @@ function randomId(): string {
   return 'ls-' + Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
 
-/** Gera o token único (string que vai dentro do QR). */
-export function makeToken(name: string, store: Store): string {
+/** Gera o token único (string que vai dentro do QR) com todos os dados do lead. */
+export function makeToken(input: { name: string; phone: string; categories: string[]; store: Store }): string {
   const payload: TokenPayload = {
     v: 1,
     id: randomId(),
-    name: name.trim(),
-    storeName: store.name,
-    prize: store.prize,
+    name: input.name.trim(),
+    phone: input.phone,
+    categories: input.categories,
+    storeName: input.store.name,
+    prize: input.store.prize,
+    location: TOTEM.location,
     ts: Date.now(),
   }
   return b64urlEncode(JSON.stringify(payload))
