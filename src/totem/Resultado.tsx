@@ -10,7 +10,7 @@ export function Resultado({ name, store, token, onRestart }: { name: string; sto
   const [left, setLeft] = useState(RESTART_SECONDS)
 
   useEffect(() => {
-    QRCode.toDataURL(token, { margin: 1, width: 460, color: { dark: '#1b1c1c', light: '#ffffff' } })
+    QRCode.toDataURL(token, { margin: 3, width: 520, errorCorrectionLevel: 'M', color: { dark: '#000000', light: '#ffffff' } })
       .then(setQr)
       .catch(() => setQr(''))
   }, [token])
