@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Palco virtual do totem — TV vertical 1080×1920 */
+  --stage-w: 1080;
+  --stage-h: 1920;
+
+  /*
+   * ZONA DE CONFORTO (cadastro): faixa vertical onde ficam o campo de input
+   * e o teclado virtual, numa escala 0–10 de altura. 9 = bem embaixo, pra
+   * pessoa EM PÉ digitar sem agachar. Diminua para subir o bloco.
+   */
+  --comfort-zone: 9;
+  --kb-gap: calc((10 - var(--comfort-zone)) * 40px);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #161717;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* ===== Palco escalado para qualquer tela mantendo 9:16 ===== */
+.stage-viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 0%, #2c2d2d 0%, #1c1d1d 55%, #121313 100%);
+}
+
+.stage {
+  position: relative;
+  width: calc(var(--stage-w) * 1px);
+  height: calc(var(--stage-h) * 1px);
+  transform-origin: center center;
+  overflow: hidden;
+  background: #1f2020;
+  color: #f3f4f1;
+  box-shadow: 0 50px 140px rgba(0, 0, 0, 0.65);
+}
+
+/* ===== Glassmorphism ===== */
+.glass {
+  background: linear-gradient(160deg, rgba(3, 160, 149, 0.16), rgba(61, 62, 62, 0.4));
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-strong {
+  background: linear-gradient(160deg, rgba(3, 160, 149, 0.26), rgba(24, 25, 25, 0.72));
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* ===== Vitória (dourado — uso exclusivo) ===== */
+.text-gold-glow {
+  color: #d9dc00;
+  text-shadow: 0 0 30px rgba(217, 220, 0, 0.7), 0 0 70px rgba(217, 220, 0, 0.35);
+}
+
+.gold-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(217, 220, 0, 0.95), transparent 62%);
+}
+
+/* Bloco de interação do cadastro ancorado na zona de conforto inferior */
+.comfort-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--kb-gap);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
