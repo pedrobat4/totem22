@@ -43,12 +43,14 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center px-[4cqw]">
-      <h1 className="absolute top-[9cqw] text-center text-[6cqw] font-extrabold text-white">
-        {spinning ? 'Boa sorte! 🍀' : 'Toque para girar'}
+    <div className="flex h-full w-full flex-col items-center px-[5cqw] pt-[7cqw]">
+      <h1 className="text-center text-[6cqw] font-extrabold leading-tight text-white">
+        {spinning ? 'Boa sorte! 🍀' : 'Toque no centro para girar'}
       </h1>
+      {!spinning && <p className="mt-[1cqw] text-[2.9cqw] text-teal">Cada giro garante um prêmio</p>}
 
-      <div className="relative h-[88cqw] w-[88cqw]">
+      {/* roleta — clicável (clicar no meio gira) e posicionada mais para cima */}
+      <div className="relative mt-[5cqw] h-[84cqw] w-[84cqw] cursor-pointer" onClick={start}>
         {/* ponteiro fixo no topo */}
         <div
           className="absolute left-1/2 top-[-2.4cqw] z-20 -translate-x-1/2"
@@ -60,17 +62,21 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
         </motion.div>
 
         {flash && <motion.div className="gold-flash" initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.1, times: [0, 0.2, 1] }} />}
-      </div>
 
-      {!spinning && (
-        <motion.button
-          whileTap={{ scale: 0.94 }}
-          onClick={start}
-          className="animate-touchpulse absolute bottom-[9cqw] rounded-full bg-lime px-[7cqw] py-[3.4cqw] text-[4.4cqw] font-extrabold text-graphite-950 shadow-[0_2cqw_6cqw_rgba(148,188,34,.5)]"
-        >
-          GIRAR 🎯
-        </motion.button>
-      )}
+        {/* botão central GIRAR (fora da rotação) */}
+        {!spinning && (
+          <motion.button
+            onClick={(e) => {
+              e.stopPropagation()
+              start()
+            }}
+            whileTap={{ scale: 0.92 }}
+            className="animate-touchpulse absolute left-1/2 top-1/2 z-30 flex h-[19cqw] w-[19cqw] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-lime text-[3.6cqw] font-black tracking-wide text-graphite-950 shadow-[0_1.4cqw_4cqw_rgba(148,188,34,.55)]"
+          >
+            GIRAR
+          </motion.button>
+        )}
+      </div>
     </div>
   )
 }

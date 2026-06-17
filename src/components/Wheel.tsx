@@ -44,9 +44,8 @@ export function Wheel({ stores }: { stores: Store[] }) {
         )
       })}
       <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(255,255,255,.16)" strokeWidth={6} />
-      {/* hub central */}
-      <circle cx={CX} cy={CY} r={64} fill="#1b1c1c" stroke="#94BC22" strokeWidth={6} />
-      <text x={CX} y={CY + 12} textAnchor="middle" fontSize={36}>🎯</text>
+      {/* aro do hub central (o botão GIRAR é sobreposto por cima, fora da rotação) */}
+      <circle cx={CX} cy={CY} r={92} fill="#1b1c1c" stroke="rgba(255,255,255,.18)" strokeWidth={5} />
     </svg>
   )
 }
