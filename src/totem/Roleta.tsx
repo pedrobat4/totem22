@@ -30,8 +30,7 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
     if (spinning) return
     setSpinning(true)
     const idx = STORES.findIndex((s) => s.id === winner.id)
-    const target = 360 * SPINS - sectorCenter(idx, STORES.length)
-    setRot(target)
+    setRot(360 * SPINS - sectorCenter(idx, STORES.length))
   }
 
   const onComplete = () => {
@@ -44,34 +43,30 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center px-12">
-      <h1 className="absolute top-[120px] text-center text-[64px] font-extrabold text-white">
+    <div className="flex h-full w-full flex-col items-center justify-center px-[4cqw]">
+      <h1 className="absolute top-[9cqw] text-center text-[6cqw] font-extrabold text-white">
         {spinning ? 'Boa sorte! 🍀' : 'Toque para girar'}
       </h1>
 
-      <div className="relative" style={{ width: 900, height: 900 }}>
+      <div className="relative h-[88cqw] w-[88cqw]">
         {/* ponteiro fixo no topo */}
-        <div className="absolute left-1/2 top-[-26px] z-20 -translate-x-1/2" style={{ width: 0, height: 0, borderLeft: '34px solid transparent', borderRight: '34px solid transparent', borderTop: '54px solid #94BC22', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,.5))' }} />
+        <div
+          className="absolute left-1/2 top-[-2.4cqw] z-20 -translate-x-1/2"
+          style={{ width: 0, height: 0, borderLeft: '3.2cqw solid transparent', borderRight: '3.2cqw solid transparent', borderTop: '5cqw solid #94BC22', filter: 'drop-shadow(0 0.6cqw 1cqw rgba(0,0,0,.5))' }}
+        />
 
-        <motion.div
-          className="h-full w-full"
-          animate={{ rotate: rot }}
-          transition={{ duration: 5.6, ease: [0.1, 0.82, 0.12, 1] }}
-          onAnimationComplete={onComplete}
-        >
+        <motion.div className="h-full w-full" animate={{ rotate: rot }} transition={{ duration: 5.6, ease: [0.1, 0.82, 0.12, 1] }} onAnimationComplete={onComplete}>
           <Wheel stores={STORES} />
         </motion.div>
 
-        {flash && (
-          <motion.div className="gold-flash" initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.1, times: [0, 0.2, 1] }} />
-        )}
+        {flash && <motion.div className="gold-flash" initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.1, times: [0, 0.2, 1] }} />}
       </div>
 
       {!spinning && (
         <motion.button
           whileTap={{ scale: 0.94 }}
           onClick={start}
-          className="animate-touchpulse absolute bottom-[120px] rounded-full bg-lime px-16 py-7 text-[46px] font-extrabold text-graphite-950 shadow-[0_20px_60px_rgba(148,188,34,.5)]"
+          className="animate-touchpulse absolute bottom-[9cqw] rounded-full bg-lime px-[7cqw] py-[3.4cqw] text-[4.4cqw] font-extrabold text-graphite-950 shadow-[0_2cqw_6cqw_rgba(148,188,34,.5)]"
         >
           GIRAR 🎯
         </motion.button>

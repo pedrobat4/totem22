@@ -28,7 +28,7 @@ function Key({ label, onTap, className = '', flex = 1 }: { label: string; onTap:
       whileTap={{ scale: 0.9 }}
       onClick={onTap}
       style={{ flex }}
-      className={`glass flex h-[96px] items-center justify-center rounded-2xl text-[40px] font-semibold text-white/90 ${className}`}
+      className={`glass flex h-[9cqw] items-center justify-center rounded-[2cqw] text-[3.7cqw] font-semibold text-white/90 ${className}`}
     >
       {label}
     </motion.button>
@@ -37,29 +37,28 @@ function Key({ label, onTap, className = '', flex = 1 }: { label: string; onTap:
 
 export function VirtualKeyboard({ mode, onKey, onBackspace, onConfirm, confirmLabel = 'Confirmar', canConfirm = true }: Props) {
   const rows = mode === 'qwerty' ? QWERTY : NUMERIC
+  const numeric = mode === 'numeric'
 
   return (
-    <div className="flex flex-col gap-3 px-10">
+    <div className="flex flex-col gap-[1.4cqw] px-[3cqw]">
       {rows.map((row, i) => (
-        <div key={i} className="flex justify-center gap-3">
+        <div key={i} className="flex justify-center gap-[1.4cqw]">
           {row.map((k) => (
-            <Key key={k} label={k} onTap={() => onKey(k)} flex={mode === 'numeric' ? 0 : 1} className={mode === 'numeric' ? 'w-[200px] flex-none' : ''} />
+            <Key key={k} label={k} onTap={() => onKey(k)} flex={numeric ? 0 : 1} className={numeric ? 'w-[19cqw] flex-none' : ''} />
           ))}
         </div>
       ))}
 
-      <div className="mt-1 flex justify-center gap-3">
-        {mode === 'qwerty' && (
-          <Key label="espaço" onTap={() => onKey(' ')} flex={2} className="text-[26px] uppercase tracking-widest text-white/60" />
-        )}
-        <Key label="⌫" onTap={onBackspace} flex={1} className="bg-white/5 text-[44px]" />
+      <div className="mt-[0.6cqw] flex justify-center gap-[1.4cqw]">
+        {!numeric && <Key label="espaço" onTap={() => onKey(' ')} flex={2} className="text-[2.4cqw] uppercase tracking-widest text-white/60" />}
+        <Key label="⌫" onTap={onBackspace} flex={1} className="bg-white/5 text-[4cqw]" />
         <motion.button
           whileTap={{ scale: 0.94 }}
           onClick={() => canConfirm && onConfirm()}
           disabled={!canConfirm}
           style={{ flex: 2 }}
-          className={`flex h-[96px] items-center justify-center gap-3 rounded-2xl text-[34px] font-bold transition ${
-            canConfirm ? 'bg-lime text-graphite-950 shadow-[0_14px_40px_rgba(148,188,34,.45)]' : 'cursor-not-allowed bg-white/5 text-white/25'
+          className={`flex h-[9cqw] items-center justify-center gap-[1cqw] rounded-[2cqw] text-[3.2cqw] font-bold transition ${
+            canConfirm ? 'bg-lime text-graphite-950 shadow-[0_1.4cqw_4cqw_rgba(148,188,34,.45)]' : 'cursor-not-allowed bg-white/5 text-white/25'
           }`}
         >
           {confirmLabel} →

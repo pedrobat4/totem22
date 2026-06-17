@@ -16,16 +16,13 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
 
   const nameValid = name.trim().length >= 2
   const phoneValid = digits.length === 11
-
   const isName = sub === 'nome'
-  const prompt = isName ? 'Como podemos te chamar?' : 'Qual seu WhatsApp?'
-  const sub2 = isName ? 'Digite seu nome' : 'Você recebe o prêmio por aqui'
 
   const handleKey = (ch: string) => {
     if (isName) {
       if (name.length < 28) setName((n) => n + ch)
-    } else {
-      if (/[0-9]/.test(ch)) setDigits((d) => (d.length < 11 ? d + ch : d))
+    } else if (/[0-9]/.test(ch)) {
+      setDigits((d) => (d.length < 11 ? d + ch : d))
     }
   }
   const handleBack = () => (isName ? setName((n) => n.slice(0, -1)) : setDigits((d) => d.slice(0, -1)))
@@ -37,11 +34,11 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
   const display = isName ? name : formatPhone(digits)
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center px-16 pt-[150px]">
+    <div className="flex h-full w-full flex-col items-center px-[5cqw] pt-[7cqw]">
       {/* progresso */}
-      <div className="flex gap-3">
+      <div className="flex gap-[1.4cqw]">
         {['nome', 'telefone'].map((s) => (
-          <div key={s} className={`h-2 w-24 rounded-full ${sub === s ? 'bg-lime' : 'bg-white/15'}`} />
+          <div key={s} className={`h-[0.8cqw] w-[10cqw] rounded-full ${sub === s ? 'bg-lime' : 'bg-white/15'}`} />
         ))}
       </div>
 
@@ -52,24 +49,28 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="mt-16 text-center"
+          className="mt-[6cqw] text-center"
         >
-          <h1 className="text-[72px] font-extrabold leading-tight text-white">{prompt}</h1>
-          <p className="mt-3 text-[30px] text-teal">{sub2}</p>
+          <h1 className="text-[6.6cqw] font-extrabold leading-tight text-white">
+            {isName ? 'Como podemos te chamar?' : 'Qual seu WhatsApp?'}
+          </h1>
+          <p className="mt-[1cqw] text-[2.9cqw] text-teal">
+            {isName ? 'Digite seu nome' : 'Você recebe o prêmio por aqui'}
+          </p>
         </motion.div>
       </AnimatePresence>
 
-      {/* input + teclado na ZONA DE CONFORTO inferior (--comfort-zone) */}
-      <div className="comfort-block">
-        <div className="mx-16 mb-8">
-          <div className="glass-strong flex min-h-[130px] items-center justify-center rounded-3xl px-10">
-            <span className="text-[68px] font-bold tracking-wide text-white">
+      {/* input + teclado empurrados para a ZONA DE CONFORTO inferior */}
+      <div className="comfort-pad mt-auto w-full">
+        <div className="mx-[2cqw] mb-[3cqw]">
+          <div className="glass-strong flex min-h-[12cqw] items-center justify-center rounded-[3cqw] px-[4cqw]">
+            <span className="text-[6cqw] font-bold tracking-wide text-white">
               {display || <span className="text-white/30">{isName ? 'Seu nome' : '(00) 00000-0000'}</span>}
             </span>
-            <span className="ml-2 inline-block h-[64px] w-[3px] animate-pulse bg-lime" />
+            <span className="ml-[0.4cqw] inline-block h-[5.5cqw] w-[0.4cqw] animate-pulse bg-lime" />
           </div>
           {!isName && digits.length > 0 && !phoneValid && (
-            <p className="mt-3 text-center text-[24px] text-white/45">Faltam {11 - digits.length} dígitos</p>
+            <p className="mt-[1cqw] text-center text-[2.4cqw] text-white/45">Faltam {11 - digits.length} dígitos</p>
           )}
         </div>
 
@@ -78,7 +79,7 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
           onKey={handleKey}
           onBackspace={handleBack}
           onConfirm={handleConfirm}
-          confirmLabel={isName ? 'Continuar' : 'Continuar'}
+          confirmLabel="Continuar"
           canConfirm={isName ? nameValid : phoneValid}
         />
       </div>

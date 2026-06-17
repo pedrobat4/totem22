@@ -3,18 +3,12 @@
 @tailwind utilities;
 
 :root {
-  /* Palco virtual do totem — TV vertical 1080×1920 */
-  --stage-w: 1080;
-  --stage-h: 1920;
-
   /*
-   * ZONA DE CONFORTO (cadastro): faixa vertical onde ficam o campo de input
-   * e o teclado virtual, numa escala 0–10 de altura. 9 = bem embaixo, pra
-   * pessoa EM PÉ digitar sem agachar. Diminua para subir o bloco.
+   * ZONA DE CONFORTO (cadastro): faixa 0–10 da altura onde o teclado fica.
+   * 9 = bem embaixo, pra pessoa EM PÉ digitar sem agachar. O bloco do teclado
+   * é empurrado pro fundo por flexbox; este valor só ajusta o respiro inferior.
    */
   --comfort-zone: 9;
-  --kb-gap: calc((10 - var(--comfort-zone)) * 40px);
-
   color-scheme: dark;
 }
 
@@ -31,55 +25,58 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #161717;
+  background: #141515;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   user-select: none;
   touch-action: manipulation;
 }
 
-/* ===== Palco escalado para qualquer tela mantendo 9:16 ===== */
-.stage-viewport {
+/*
+ * .screen — área útil do totem. PREENCHE o viewport real do aparelho
+ * (celular cheio, TV cheia). Em telas largas (desktop) vira uma coluna
+ * portrait centralizada. Todos os tamanhos dos filhos usam `cqw`
+ * (1cqw = 1% da largura desta coluna), então tudo é proporcional em
+ * qualquer resolução — sem letterbox, sem escala fixa.
+ */
+.screen {
   position: fixed;
   inset: 0;
-  display: grid;
-  place-items: center;
+  margin: auto;
+  width: min(100vw, calc(100dvh * 9 / 16));
+  height: 100dvh;
+  container-type: inline-size;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 0%, #2c2d2d 0%, #1c1d1d 55%, #121313 100%);
+  background: radial-gradient(circle at 50% 0%, #2c2d2d 0%, #1c1d1d 55%, #131414 100%);
+  color: #f3f4f1;
 }
 
-.stage {
-  position: relative;
-  width: calc(var(--stage-w) * 1px);
-  height: calc(var(--stage-h) * 1px);
-  transform-origin: center center;
-  overflow: hidden;
-  background: #1f2020;
-  color: #f3f4f1;
-  box-shadow: 0 50px 140px rgba(0, 0, 0, 0.65);
+/* respiro inferior da zona de conforto (cadastro) */
+.comfort-pad {
+  padding-bottom: calc((10 - var(--comfort-zone)) * 2cqw + 4cqw);
 }
 
 /* ===== Glassmorphism ===== */
 .glass {
   background: linear-gradient(160deg, rgba(3, 160, 149, 0.16), rgba(61, 62, 62, 0.4));
-  backdrop-filter: blur(22px) saturate(140%);
-  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2cqw 5cqw rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .glass-strong {
   background: linear-gradient(160deg, rgba(3, 160, 149, 0.26), rgba(24, 25, 25, 0.72));
-  backdrop-filter: blur(28px) saturate(150%);
-  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  box-shadow: 0 2.4cqw 6cqw rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 /* ===== Vitória (dourado — uso exclusivo) ===== */
 .text-gold-glow {
   color: #d9dc00;
-  text-shadow: 0 0 30px rgba(217, 220, 0, 0.7), 0 0 70px rgba(217, 220, 0, 0.35);
+  text-shadow: 0 0 2.6cqw rgba(217, 220, 0, 0.7), 0 0 6cqw rgba(217, 220, 0, 0.35);
 }
 
 .gold-flash {
@@ -87,14 +84,6 @@ body,
   inset: 0;
   pointer-events: none;
   background: radial-gradient(circle at center, rgba(217, 220, 0, 0.95), transparent 62%);
-}
-
-/* Bloco de interação do cadastro ancorado na zona de conforto inferior */
-.comfort-block {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--kb-gap);
 }
 
 ::-webkit-scrollbar {

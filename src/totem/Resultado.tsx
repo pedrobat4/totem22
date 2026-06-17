@@ -23,39 +23,37 @@ export function Resultado({ name, store, token, onRestart }: { name: string; sto
   const first = name.split(' ')[0]
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center px-16 pt-[120px] text-center">
-      <motion.p initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-[40px] font-semibold text-teal">
+    <div className="flex h-full w-full flex-col items-center overflow-y-auto px-[5cqw] pb-[6cqw] pt-[7cqw] text-center">
+      <motion.p initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-[3.8cqw] font-semibold text-teal">
         Parabéns, {first}!
       </motion.p>
       <motion.h1
         initial={{ scale: 0.7, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-        className="text-gold-glow mt-2 text-[120px] font-black leading-none"
+        className="text-gold-glow mt-[1cqw] text-[11cqw] font-black leading-none"
       >
         Você ganhou!
       </motion.h1>
 
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-strong mt-10 w-full max-w-[820px] rounded-[40px] p-12">
-        <div className="text-[60px]">{store.emoji}</div>
-        <div className="mt-2 text-[58px] font-extrabold text-white">{store.name}</div>
-        <div className="mt-3 inline-block rounded-full bg-lime px-8 py-3 text-[36px] font-bold text-graphite-950">{store.prize}</div>
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-strong mt-[4cqw] w-full rounded-[4cqw] p-[5cqw]">
+        <div className="text-[6cqw]">{store.emoji}</div>
+        <div className="mt-[0.6cqw] text-[5.4cqw] font-extrabold text-white">{store.name}</div>
+        <div className="mt-[1.4cqw] inline-block rounded-full bg-lime px-[3.5cqw] py-[1.4cqw] text-[3.3cqw] font-bold text-graphite-950">{store.prize}</div>
 
         {qr ? (
-          <img src={qr} alt="QR Code do prêmio" className="mx-auto mt-10 h-[420px] w-[420px] rounded-3xl bg-white p-4" />
+          <img src={qr} alt="QR Code do prêmio" className="mx-auto mt-[4cqw] h-[42cqw] w-[42cqw] rounded-[3cqw] bg-white p-[1.5cqw]" />
         ) : (
-          <div className="mx-auto mt-10 flex h-[420px] w-[420px] items-center justify-center rounded-3xl bg-white/10 text-[30px] text-white/50">gerando…</div>
+          <div className="mx-auto mt-[4cqw] flex h-[42cqw] w-[42cqw] items-center justify-center rounded-[3cqw] bg-white/10 text-[3cqw] text-white/50">gerando…</div>
         )}
 
-        <p className="mt-8 text-[30px] leading-snug text-white/80">
-          Mostre este QR Code na loja para retirar seu prêmio.
-        </p>
-        <p className="mt-3 flex items-center justify-center gap-3 text-[28px] font-semibold text-lime">
+        <p className="mt-[3cqw] text-[2.9cqw] leading-snug text-white/80">Mostre este QR Code na loja para retirar seu prêmio.</p>
+        <p className="mt-[1.2cqw] flex items-center justify-center gap-[1cqw] text-[2.8cqw] font-semibold text-lime">
           <span>📲</span> Também enviamos para o seu WhatsApp
         </p>
       </motion.div>
 
-      <button onClick={onRestart} className="mt-10 rounded-full glass px-12 py-5 text-[34px] font-bold text-white">
+      <button onClick={onRestart} className="glass mt-[4cqw] rounded-full px-[5cqw] py-[2.4cqw] text-[3.2cqw] font-bold text-white">
         Nova participação ({left}s)
       </button>
     </div>
