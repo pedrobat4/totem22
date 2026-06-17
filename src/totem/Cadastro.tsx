@@ -45,44 +45,46 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
       <AnimatePresence mode="wait">
         <motion.div
           key={sub}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
+          exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.3 }}
-          className="mt-[6cqw] text-center"
+          className="flex w-full flex-col items-center"
         >
-          <h1 className="text-[6.6cqw] font-extrabold leading-tight text-white">
-            {isName ? 'Como podemos te chamar?' : 'Qual seu WhatsApp?'}
-          </h1>
-          <p className="mt-[1cqw] text-[2.9cqw] text-teal">
-            {isName ? 'Digite seu nome' : 'Você recebe o prêmio por aqui'}
-          </p>
+          {/* título + subtítulo */}
+          <div className="mt-[5cqw] text-center">
+            <h1 className="text-[6.6cqw] font-extrabold leading-tight text-white">
+              {isName ? 'Como podemos te chamar?' : 'Qual seu WhatsApp?'}
+            </h1>
+            <p className="mt-[1cqw] text-[2.9cqw] text-teal">{isName ? 'Digite seu nome' : 'Você recebe o prêmio por aqui'}</p>
+          </div>
+
+          {/* campo de input — logo abaixo do subtítulo */}
+          <div className="mt-[3.5cqw] w-full px-[2cqw]">
+            <div className="glass-strong flex min-h-[12cqw] items-center justify-center rounded-[3cqw] px-[4cqw]">
+              <span className="text-[6cqw] font-bold tracking-wide text-white">
+                {display || <span className="text-white/30">{isName ? 'Seu nome' : '(00) 00000-0000'}</span>}
+              </span>
+              <span className="ml-[0.4cqw] inline-block h-[5.5cqw] w-[0.4cqw] animate-pulse bg-lime" />
+            </div>
+            {!isName && digits.length > 0 && !phoneValid && (
+              <p className="mt-[1cqw] text-center text-[2.4cqw] text-white/45">Faltam {11 - digits.length} dígitos</p>
+            )}
+          </div>
+
+          {/* TECLADO — no topo, logo abaixo do campo de input */}
+          <div className="mt-[3cqw] w-full">
+            <VirtualKeyboard
+              mode={isName ? 'qwerty' : 'numeric'}
+              onKey={handleKey}
+              onBackspace={handleBack}
+              onConfirm={handleConfirm}
+              confirmLabel="Continuar"
+              canConfirm={isName ? nameValid : phoneValid}
+            />
+          </div>
         </motion.div>
       </AnimatePresence>
-
-      {/* input + teclado empurrados para a ZONA DE CONFORTO inferior */}
-      <div className="comfort-pad mt-auto w-full">
-        <div className="mx-[2cqw] mb-[3cqw]">
-          <div className="glass-strong flex min-h-[12cqw] items-center justify-center rounded-[3cqw] px-[4cqw]">
-            <span className="text-[6cqw] font-bold tracking-wide text-white">
-              {display || <span className="text-white/30">{isName ? 'Seu nome' : '(00) 00000-0000'}</span>}
-            </span>
-            <span className="ml-[0.4cqw] inline-block h-[5.5cqw] w-[0.4cqw] animate-pulse bg-lime" />
-          </div>
-          {!isName && digits.length > 0 && !phoneValid && (
-            <p className="mt-[1cqw] text-center text-[2.4cqw] text-white/45">Faltam {11 - digits.length} dígitos</p>
-          )}
-        </div>
-
-        <VirtualKeyboard
-          mode={isName ? 'qwerty' : 'numeric'}
-          onKey={handleKey}
-          onBackspace={handleBack}
-          onConfirm={handleConfirm}
-          confirmLabel="Continuar"
-          canConfirm={isName ? nameValid : phoneValid}
-        />
-      </div>
     </div>
   )
 }

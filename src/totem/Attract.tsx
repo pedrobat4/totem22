@@ -6,8 +6,8 @@ const SWAP_MS = 9000
 
 /**
  * Atração: os 2 vídeos ficam SEMPRE montados e tocando; trocamos só a opacidade
- * (crossfade). Nunca pisca, nunca fica preto. A única coisa por cima do vídeo é
- * o botão pulsante no rodapé — não cobre a publicidade.
+ * (crossfade). Nunca pisca, nunca fica preto. A tela toda é tocável; por cima do
+ * vídeo só existe um convite DISCRETO no topo — não cobre a publicidade.
  */
 export function Attract({ onStart }: { onStart: () => void }) {
   const [active, setActive] = useState(0)
@@ -37,19 +37,27 @@ export function Attract({ onStart }: { onStart: () => void }) {
         />
       ))}
 
-      {/* vinheta sutil nas bordas, sem tampar o centro */}
-      <div className="pointer-events-none absolute inset-0" style={{ boxShadow: 'inset 0 0 18cqw rgba(0,0,0,.5)' }} />
+      {/* leve escurecimento só no topo, pra dar legibilidade ao convite */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[22cqw]" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,.45), transparent)' }} />
 
-      {/* botão compacto, rodapé, pulsante — NÃO cobre a publicidade */}
+      {/* convite DISCRETO no topo — chip de vidro com pontinho lime pulsando */}
       <motion.button
         onClick={(e) => {
           e.stopPropagation()
           onStart()
         }}
-        whileTap={{ scale: 0.95 }}
-        className="animate-touchpulse absolute bottom-[7cqw] left-1/2 -translate-x-1/2 rounded-full bg-lime px-[6cqw] py-[3cqw] text-[4.2cqw] font-extrabold text-graphite-950 shadow-[0_2cqw_6cqw_rgba(148,188,34,.5)]"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        whileTap={{ scale: 0.96 }}
+        className="absolute left-1/2 top-[6cqw] flex -translate-x-1/2 items-center gap-[1.6cqw] rounded-full border border-white/25 px-[4cqw] py-[1.8cqw] text-[2.9cqw] font-medium text-white/95"
+        style={{ background: 'rgba(20,21,21,.32)', backdropFilter: 'blur(12px) saturate(140%)', WebkitBackdropFilter: 'blur(12px) saturate(140%)', textShadow: '0 1px 6px rgba(0,0,0,.5)' }}
       >
-        👆 Toque para participar
+        <span className="relative flex h-[1.8cqw] w-[1.8cqw]">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime opacity-70" />
+          <span className="relative inline-flex h-[1.8cqw] w-[1.8cqw] rounded-full bg-lime" />
+        </span>
+        Toque para participar
       </motion.button>
     </div>
   )
