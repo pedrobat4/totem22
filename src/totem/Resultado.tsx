@@ -10,7 +10,7 @@ export function Resultado({ name, store, token, onRestart }: { name: string; sto
   const [left, setLeft] = useState(RESTART_SECONDS)
 
   useEffect(() => {
-    QRCode.toDataURL(token, { margin: 3, width: 520, errorCorrectionLevel: 'M', color: { dark: '#000000', light: '#ffffff' } })
+    QRCode.toDataURL(token, { margin: 3, width: 560, errorCorrectionLevel: 'L', color: { dark: '#000000', light: '#ffffff' } })
       .then(setQr)
       .catch(() => setQr(''))
   }, [token])
@@ -42,9 +42,9 @@ export function Resultado({ name, store, token, onRestart }: { name: string; sto
         <div className="mt-[1.4cqw] inline-block rounded-full bg-lime px-[3.5cqw] py-[1.4cqw] text-[3.3cqw] font-bold text-graphite-950">{store.prize}</div>
 
         {qr ? (
-          <img src={qr} alt="QR Code do prêmio" className="mx-auto mt-[4cqw] h-[42cqw] w-[42cqw] rounded-[3cqw] bg-white p-[1.5cqw]" />
+          <img src={qr} alt="QR Code do prêmio" className="mx-auto mt-[4cqw] h-[48cqw] w-[48cqw] rounded-[3cqw] bg-white p-[1.5cqw]" />
         ) : (
-          <div className="mx-auto mt-[4cqw] flex h-[42cqw] w-[42cqw] items-center justify-center rounded-[3cqw] bg-white/10 text-[3cqw] text-white/50">gerando…</div>
+          <div className="mx-auto mt-[4cqw] flex h-[48cqw] w-[48cqw] items-center justify-center rounded-[3cqw] bg-white/10 text-[3cqw] text-white/50">gerando…</div>
         )}
 
         <p className="mt-[3cqw] text-[2.9cqw] leading-snug text-white/80">Mostre este QR Code na loja para retirar seu prêmio.</p>

@@ -20,9 +20,9 @@ function fmtWhen(ts: number): string {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-white/10 py-2.5 last:border-0">
-      <span className="shrink-0 text-white/55">{label}</span>
-      <span className="text-right font-semibold">{value || '—'}</span>
+    <div className="flex items-start justify-between gap-4 py-3">
+      <span className="shrink-0 text-sm font-medium uppercase tracking-wide text-white/45">{label}</span>
+      <span className="text-right text-lg font-semibold text-white">{value || '—'}</span>
     </div>
   )
 }
@@ -52,7 +52,6 @@ export function Validador() {
     setScanning(false)
   }
 
-  // decodifica + define status (usado tanto pela câmera quanto pela foto)
   function process(text: string) {
     // GANCHO API REAL: troque por  await fetch('/api/validar', { method:'POST', body: token })
     const payload = decodeToken(text)
@@ -66,7 +65,6 @@ export function Validador() {
     setError('')
     setResult(null)
     const scanner = ensure()
-    // Config robusta: detector nativo do navegador quando houver + quadro inteiro.
     const config = { fps: 15, experimentalFeatures: { useBarCodeDetectorIfSupported: true } }
     const onHit = async (text: string) => {
       if (!runningRef.current) return
@@ -85,7 +83,6 @@ export function Validador() {
     }
   }
 
-  // Plano B: ler o QR de uma foto (tirar agora ou escolher da galeria)
   async function onFile(ev: React.ChangeEvent<HTMLInputElement>) {
     const file = ev.target.files?.[0]
     ev.target.value = ''
@@ -110,78 +107,90 @@ export function Validador() {
 
   const ok = result?.status === 'valid'
   const used = result?.status === 'used'
-  const pageBg = !result ? '#1b1c1c' : ok ? '#1d2b0a' : used ? '#2b0d0d' : '#2b2410'
+  const pageBg = !result ? '#161717' : ok ? '#16230a' : used ? '#230a0a' : '#231d0a'
   const headBg = ok ? '#94BC22' : used ? '#C0142B' : '#9a7b13'
 
   return (
-    <div className="min-h-screen w-full text-white" style={{ background: pageBg, transition: 'background .3s', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    // wrapper fixo + rolável: escapa do overflow:hidden global do totem e rola no celular
+    <div
+      className="fixed inset-0 overflow-y-auto text-white"
+      style={{ background: pageBg, transition: 'background .3s', fontFamily: 'Inter, system-ui, sans-serif', WebkitOverflowScrolling: 'touch' }}
+    >
       <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={onFile} className="hidden" />
 
-      <div className="mx-auto flex min-h-screen max-w-[560px] flex-col px-6 py-8">
+      <div className="mx-auto w-full max-w-[560px] px-5 pb-12 pt-8">
         <header className="text-center">
-          <h1 className="text-3xl font-extrabold">
-            Lead<span className="text-lime">Spin</span> · Validador
+          <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-lime" />
+          <h1 className="text-3xl font-black tracking-tight">
+            Lead<span className="text-lime">Spin</span>
           </h1>
-          <p className="mt-1 text-white/60">Aponte a câmera para o QR Code do prêmio</p>
+          <p className="mt-1 text-sm text-white/55">Validador de prêmios · escaneie o QR Code</p>
         </header>
 
-        {/* câmera */}
-        <div className="relative mt-6 overflow-hidden rounded-3xl border border-white/10 bg-black/40">
+        {/* câmera (some quando há resultado) */}
+        <div className={`relative mt-7 overflow-hidden rounded-[28px] border border-white/10 bg-black/50 shadow-2xl ${result ? 'hidden' : ''}`}>
           <div id={READER_ID} className="aspect-square w-full" />
-          {!scanning && !result && (
-            <button onClick={start} className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/50 text-center">
-              <span className="text-5xl">📷</span>
-              <span className="rounded-full bg-lime px-7 py-3 text-xl font-extrabold text-graphite-950">Ativar câmera</span>
-              <span className="px-8 text-sm text-white/60">Toque e permita o acesso à câmera</span>
+          {!scanning && (
+            <button onClick={start} className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/55 text-center backdrop-blur-sm">
+              <span className="text-6xl">📷</span>
+              <span className="rounded-full bg-lime px-8 py-3.5 text-xl font-extrabold text-graphite-950 shadow-lg">Ativar câmera</span>
+              <span className="px-8 text-sm text-white/55">Toque e permita o acesso à câmera</span>
             </button>
+          )}
+          {scanning && (
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="h-[62%] w-[62%] rounded-3xl border-[3px] border-lime/80" style={{ boxShadow: '0 0 0 9999px rgba(0,0,0,.28)' }} />
+            </div>
           )}
         </div>
 
-        {error && <p className="mt-5 rounded-2xl bg-red-500/15 p-4 text-center text-sm text-red-200">{error}</p>}
-
-        {/* dica + plano B enquanto escaneia */}
         {scanning && !result && (
           <div className="mt-4 text-center">
-            <p className="text-sm text-white/40">Mantenha o QR a ~15 cm, centralizado e com boa luz</p>
+            <p className="text-sm text-white/50">Centralize o QR no quadro · ~15 cm · boa luz</p>
             <button onClick={() => fileRef.current?.click()} className="mt-3 rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white/80">
               não está lendo? 📸 ler por foto
             </button>
           </div>
         )}
 
+        {error && <p className="mt-5 rounded-2xl bg-red-500/15 p-4 text-center text-sm text-red-200">{error}</p>}
+
         {/* resultado */}
         {result && (
-          <div className="mt-6 overflow-hidden rounded-3xl border border-white/10">
-            <div className="p-6 text-center" style={{ background: headBg, color: ok ? '#1b1c1c' : '#fff' }}>
-              <div className="text-6xl">{ok ? '✅' : used ? '⛔' : '❓'}</div>
-              <div className="mt-1 text-4xl font-black">{ok ? 'VÁLIDO' : used ? 'JÁ UTILIZADO' : 'QR INVÁLIDO'}</div>
-              {used && <div className="mt-1 text-sm opacity-90">Este prêmio já foi resgatado</div>}
+          <div className="mt-7">
+            <div className="rounded-[28px] p-7 text-center shadow-2xl" style={{ background: headBg, color: ok ? '#15240a' : '#fff' }}>
+              <div className="text-7xl leading-none">{ok ? '✅' : used ? '⛔' : '❓'}</div>
+              <div className="mt-2 text-4xl font-black tracking-tight">{ok ? 'VÁLIDO' : used ? 'JÁ UTILIZADO' : 'QR INVÁLIDO'}</div>
+              <div className="mt-1 text-sm font-medium opacity-80">{ok ? 'Pode liberar o prêmio' : used ? 'Este prêmio já foi resgatado' : 'QR não reconhecido'}</div>
             </div>
 
             {result.status !== 'invalid' && (
-              <div className="bg-black/35 px-6 py-4 text-[15px]">
+              <div className="mt-4 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-2">
                 <Row label="Prêmio" value={`${result.payload.storeName} — ${result.payload.prize}`} />
+                <div className="h-px bg-white/10" />
                 <Row label="Nome" value={result.payload.name} />
+                <div className="h-px bg-white/10" />
                 <Row label="Telefone" value={result.payload.phone} />
+                <div className="h-px bg-white/10" />
                 <Row label="Mais gosta de" value={(result.payload.categories || []).join(' · ')} />
+                <div className="h-px bg-white/10" />
                 <Row label="Totem" value={result.payload.location} />
+                <div className="h-px bg-white/10" />
                 <Row label="Horário" value={fmtWhen(result.payload.ts)} />
               </div>
             )}
+
+            <button onClick={start} className="mt-6 w-full rounded-2xl bg-lime py-5 text-2xl font-extrabold text-graphite-950 shadow-lg">
+              Validar próximo →
+            </button>
           </div>
         )}
 
-        <div className="mt-auto pt-6">
-          {result ? (
-            <button onClick={start} className="w-full rounded-2xl bg-lime py-5 text-2xl font-extrabold text-graphite-950">
-              Validar próximo →
-            </button>
-          ) : !scanning ? (
-            <button onClick={() => fileRef.current?.click()} className="w-full rounded-2xl border border-white/15 py-4 text-lg font-semibold text-white/80">
-              📸 Ler de uma foto
-            </button>
-          ) : null}
-        </div>
+        {!result && !scanning && (
+          <button onClick={() => fileRef.current?.click()} className="mt-6 w-full rounded-2xl border border-white/15 py-4 text-lg font-semibold text-white/80">
+            📸 Ler de uma foto
+          </button>
+        )}
       </div>
     </div>
   )
