@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { Wheel, sectorCenter } from '../components/Wheel'
+import { BrandFooter } from '../components/BrandFooter'
 import { STORES } from '../lib/data'
 import type { Store } from '../lib/types'
 
@@ -80,6 +81,9 @@ export function Roleta({ categories, onDone }: { categories: string[]; onDone: (
           </div>
         )}
       </div>
+
+      {/* faixa de logomarcas (realização) no rodapé */}
+      <BrandFooter />
     </div>
   )
 }

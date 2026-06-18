@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { VirtualKeyboard } from '../components/VirtualKeyboard'
+import { BrandFooter } from '../components/BrandFooter'
 
 function formatPhone(digits: string): string {
   const d = digits.slice(0, 11)
@@ -85,6 +86,9 @@ export function Cadastro({ onDone }: { onDone: (name: string, phone: string) => 
           </div>
         </motion.div>
       </AnimatePresence>
+
+      {/* faixa de logomarcas (realização) no rodapé */}
+      <BrandFooter />
     </div>
   )
 }
