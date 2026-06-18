@@ -89,3 +89,19 @@ body,
 ::-webkit-scrollbar {
   display: none;
 }
+
+/*
+ * .scrollable — aplicada no <html> só na rota /validador. Desfaz o lock do
+ * totem (overflow hidden / altura fixa / no-select / touch travado) para a
+ * página de validação rolar e ser responsiva como um site normal no celular.
+ */
+html.scrollable,
+html.scrollable body,
+html.scrollable #root {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+  user-select: auto;
+  touch-action: auto;
+  -webkit-overflow-scrolling: touch;
+}
