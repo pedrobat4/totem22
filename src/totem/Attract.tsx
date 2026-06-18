@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { BrandFooter } from '../components/BrandFooter'
 
 const ADS = ['/ads/ad1.mp4', '/ads/ad2.mp4']
 const SWAP_MS = 9000
@@ -59,6 +60,9 @@ export function Attract({ onStart }: { onStart: () => void }) {
         </span>
         Toque para participar
       </motion.button>
+
+      {/* faixa de logomarcas (realização) no rodapé */}
+      <BrandFooter />
     </div>
   )
 }

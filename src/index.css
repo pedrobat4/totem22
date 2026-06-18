@@ -47,7 +47,12 @@ body,
   height: 100dvh;
   container-type: inline-size;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 0%, #2c2d2d 0%, #1c1d1d 55%, #131414 100%);
+  /* fundo mais bonito: brilho sutil das cores da marca (lime + teal) sobre o grafite */
+  background:
+    radial-gradient(120% 80% at 50% -8%, rgba(148, 188, 34, 0.1) 0%, transparent 46%),
+    radial-gradient(95% 65% at 88% 6%, rgba(3, 160, 149, 0.1) 0%, transparent 52%),
+    radial-gradient(140% 110% at 50% 120%, rgba(0, 0, 0, 0.5) 0%, transparent 55%),
+    radial-gradient(circle at 50% 0%, #2e2f2f 0%, #1d1e1e 52%, #121313 100%);
   color: #f3f4f1;
 }
 
